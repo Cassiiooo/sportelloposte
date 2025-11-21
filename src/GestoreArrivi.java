@@ -20,10 +20,15 @@ public class GestoreArrivi implements Runnable {
     public GestoreArrivi(ListaClienti listaClienti) {
         this.listaClienti = listaClienti;
     }
-    /**
-     * TODO: cosa fa?
-     * @see Runnable
-     */
+ /**
+ * Gestisce gli arrivi dei clienti finché il thread non viene interrotto.
+ * Ogni attesaArrivi aggiunge un cliente; se addCliente() restituisce null,
+ * il ciclo termina. Gestisce l’interruzione durante lo sleep e alla fine
+ * segnala la chiusura della posta.
+ *
+ * @see Runnable
+ */
+
     public void run() {
         try {
             while (!Thread.interrupted()) { 
