@@ -28,12 +28,13 @@ public class ListaClienti {
     * si genera l'eccezione : IllegalMonitorStateException,*/
 
     /**
-     * TODO: cosa fa?
-     *
+     *  metodo eseguito da un thread della Classe Sportello
+     * si chiede se è in coda un altro cliente dopo l'ultimo che ha servito
+     * @return Integer: ultimoServito
      */
     public synchronized Integer rimuoviCliente() throws
             InterruptedException {
-        while (ultimoServito >= ultimoArrivo) {
+        while (ultimoServito >= ultimoArrivo) { //5(ultimo servito)   4(ultimo arrivo) entriamo nel while, se fosse stato l'incontrario non si entrava
             System.out.println("non ci sono arrivi dopo l'ultimo servito");
             wait();
         }
@@ -41,9 +42,11 @@ public class ListaClienti {
         return ultimoServito;
     }
 
-    /**
-     * TODO: cosa fa?
-     *
+  /**
+     * metodo eseguito da un thread della Classe GestioneArrivi
+     * che produce un nuovo int aggiungendo 1 all'ultimo arrivo 
+     * e inserisce tale nuovo numero / ticket nella lista numeri
+     * @return Integer: ultimoArrivo o null se gli arrivi saturano
      */
     public synchronized Integer addCliente() {
         if (ultimoArrivo < numeroMassimo) {
