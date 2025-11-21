@@ -12,7 +12,7 @@ public class GestoreArrivi implements Runnable {
      * e la costante per il numero massimo di arrivi */
     private ListaClienti listaClienti;
     /* ms fra un arrivo e l'altro */
-    private final int attesaArrivi = 3000;
+    private final int attesaArrivi = 1000;
     /**
      * constructor
      * @param listaClienti
