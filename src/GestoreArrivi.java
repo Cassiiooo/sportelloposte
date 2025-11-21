@@ -11,6 +11,7 @@ public class GestoreArrivi implements Runnable {
      * la risorsa condivisa listaClienti
      * e la costante per il numero massimo di arrivi */
     private ListaClienti listaClienti;
+    /* ms fra un arrivo e l'altro */
     private final int attesaArrivi = 3000;
     /**
      * constructor
@@ -25,7 +26,7 @@ public class GestoreArrivi implements Runnable {
      */
     public void run() {
         try {
-            while (!Thread.interrupted()) {
+            while (!Thread.interrupted()) { 
                 Thread.sleep(attesaArrivi);
                 Integer clienteArrivato = listaClienti.addCliente();
                 if (clienteArrivato == null) {
