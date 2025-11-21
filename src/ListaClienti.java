@@ -28,9 +28,12 @@ public class ListaClienti {
     * si genera l'eccezione : IllegalMonitorStateException,*/
 
     /**
-     *  metodo eseguito da un thread della Classe Sportello
-     * si chiede se è in coda un altro cliente dopo l'ultimo che ha servito
      * @return Integer: ultimoServito
+     *  metodo eseguito da un thread della Classe Sportello,
+     * il wait se l'ultimoServizio è uguale all'ultimoArrivo, il thread entra nel wait
+     * con l'alert di aggiungi addCliente il thread esce dal wait().
+     * si chiede se è in coda un altro cliente dopo l'ultimo che ha servito se c'è si serve.
+     * (incrementa di uno l'ultimo servito) else resta in attesa che arrivi un notify()
      */
     public synchronized Integer rimuoviCliente() throws
             InterruptedException {
