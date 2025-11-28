@@ -15,5 +15,6 @@ public class SimulatorePoste {
         Thread sportelloThread2 = new Thread(new Sportello(listaClienti, "Cinzia"));
         arriviThread.start();
         sportelloThread.start();
+        sportelloThread2.start();
     }
 }
