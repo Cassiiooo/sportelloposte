@@ -11,7 +11,8 @@ public class SimulatorePoste {
     public static void main(String[] args) {
         ListaClienti listaClienti = new ListaClienti();
         Thread arriviThread = new Thread(new GestoreArrivi(listaClienti));
-        Thread sportelloThread = new Thread(new Sportello(listaClienti));
+        Thread sportelloThread = new Thread(new Sportello(listaClienti,"Marzia"));
+        Thread sportelloThread2 = new Thread(new Sportello(listaClienti, "Cinzia"));
         arriviThread.start();
         sportelloThread.start();
     }
