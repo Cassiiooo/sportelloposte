@@ -13,11 +13,13 @@ public class GestoreArrivi implements Runnable {
     private ListaClienti listaClienti;
     /* ms fra un arrivo e l'altro */
     private final int attesaArrivi = 2000;
+    private int IDtotem;
     /**
      * constructor
      * @param listaClienti
      */
-    public GestoreArrivi(ListaClienti listaClienti) {
+    public GestoreArrivi(ListaClienti listaClienti, int IDtotem) {
+        this.IDtotem = IDtotem;
         this.listaClienti = listaClienti;
     }
  /**
@@ -37,12 +39,12 @@ public class GestoreArrivi implements Runnable {
                 if (clienteArrivato == null) {
                     break;
                 }
-                System.out.println("Arrivo Cliente Numero \t " + clienteArrivato);
+                System.out.println("Arrivo Cliente Numero \t " + clienteArrivato + "dal totem" + IDtotem);
             }
         } catch (InterruptedException e) {
             System.out.println("Thread interrotto durante lo sleep");
         } finally {
-            System.out.println("Posta Chiusa");
+            System.out.println("Posta Chiusa lato totem" +IDtotem);
         }
     }
 }
