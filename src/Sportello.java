@@ -12,7 +12,7 @@ public class Sportello implements Runnable {
      * risorse condivise fra i due thread
      */
     private ListaClienti listaClienti;
-    private final int minTempoServizio = 1000;
+    private final int minTempoServizio = 2000;
     private final int maxTempoServizio = 4000;
     /**
      * constructor
