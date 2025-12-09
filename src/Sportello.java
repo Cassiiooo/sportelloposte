@@ -1,47 +1,27 @@
-/**
- * Classe che implementa il thread Sportello,
- * che serve i clienti delle
- * poste che arrivano via via, ovvero è il thread
- * consumatore delle risorse condivise
- * listaNumeri, ultimoArrivo, ultimoServito
- * @author frida
- * @version 1.0
- */
-public class Sportello implements Runnable {
-    /**
-     * risorse condivise fra i due thread
-     */
-    private ListaClienti listaClienti;
-    private final int minTempoServizio = 1000;
-    private final int maxTempoServizio = 4000;
-    /**
-     * constructor
-     * @param listaClienti
-     */
-    public Sportello(ListaClienti listaClienti) {
-        this.listaClienti = listaClienti;
+public class Sportello extends Thread {
+
+    private ListaClienti lista;
+    private boolean aperto = true;
+
+    public Sportello(ListaClienti lista) {
+        this.lista = lista;
     }
 
-    /**
-     * TODO: cosa fa?
-     * @see Runnable
-     */
+
+    public void chiudi() {
+        aperto = false;
+    }
+    @Override
     public void run() {
-        try {
-            while (!Thread.interrupted()) {
-                Integer clienteServito = listaClienti.rimuoviCliente();
-                //tempo di servizio variabile nel range [1,4] secondi
-                int tempoServizio = (int) (Math.random() * (maxTempoServizio
-                        - minTempoServizio + 1) + minTempoServizio);
-                Thread.sleep(tempoServizio);
-                //Thread.sleep(1000); //tempo di servizio fisso
-                System.out.println("Servito Cliente Numero \t " + clienteServito+
-                        " dallo sportello");
+        while (aperto) {
+            try {
+                Integer cliente = lista.prossimoCliente();
+                System.out.println("Servito cliente " + cliente);
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch (InterruptedException e) {
-            System.out.println("Thread interrotto durante lo sleep");
-        } finally {
-            System.out.println("Sportello Chiuso");
         }
+        System.out.println("Sportello Chiuso");
     }
 }

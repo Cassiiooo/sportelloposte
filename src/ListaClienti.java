@@ -1,63 +1,31 @@
 import java.util.ArrayList;
-/**
- * Classe che rappresenta la risorsa condivisa fra i due thread
- * da gestire con metodi "synchronized"
- * e con l'uso di wait() e notify()
- * @author frida
- * @version 1.0
- */
+
 public class ListaClienti {
-    private ArrayList<Integer> listaNumeri;
-    private int ultimoArrivo;
-    private int ultimoServito;
-    private final int numeroMassimo = 5;
-    /**
-     * constructor
-     * settaggio delle variabili di istanza
-     */
+
+    private ArrayList<Integer> lista;
+    private static final int MAX_ATTESA = 3;
+
     public ListaClienti() {
-        listaNumeri = new ArrayList<Integer>();
-        ultimoArrivo = 0;
-        ultimoServito = 0;
+        lista = new ArrayList<>();
     }
 
-    /*synchronized parola chiave che gestisce il meccanismo del lock ovvero
-    * 1) impedisce ad un altro thread l'esecuzione di tale
-    * metodo, se un precedente thread lo sta già eseguendo
-    * 2) senza di lui wait e notify non possono essere usati
-    * si genera l'eccezione : IllegalMonitorStateException,*/
+    public synchronized boolean aggiungiCliente(int id) {
+        if (lista.size() >= MAX_ATTESA) {
+            return false; // coda piena
+        }
+        lista.add(id);
+        notifyAll();
+        return true;
+    }
 
-    /**
-     * @return Integer: ultimoServito
-     *  metodo eseguito da un thread della Classe Sportello,
-     * il wait se l'ultimoServizio è uguale all'ultimoArrivo, il thread entra nel wait
-     * con l'alert di aggiungi addCliente il thread esce dal wait().
-     * si chiede se è in coda un altro cliente dopo l'ultimo che ha servito se c'è si serve.
-     * (incrementa di uno l'ultimo servito) else resta in attesa che arrivi un notify()
-     */
-    public synchronized Integer rimuoviCliente() throws
-            InterruptedException {
-        while (ultimoServito >= ultimoArrivo) { //5(ultimo servito)   4(ultimo arrivo) entriamo nel while, se fosse stato l'incontrario non si entrava
-            System.out.println("non ci sono arrivi dopo l'ultimo servito");
+    public synchronized Integer prossimoCliente() throws InterruptedException {
+        while (lista.isEmpty()) {
             wait();
         }
-        ultimoServito++;
-        return ultimoServito;
+        return lista.remove(0);
     }
 
-  /**
-     * metodo eseguito da un thread della Classe GestioneArrivi
-     * che produce un nuovo int aggiungendo 1 all'ultimo arrivo 
-     * e inserisce tale nuovo numero / ticket nella lista numeri
-     * @return Integer: ultimoArrivo o null se gli arrivi saturano
-     */
-    public synchronized Integer addCliente() {
-        if (ultimoArrivo < numeroMassimo) {
-            ultimoArrivo++;
-            listaNumeri.add(ultimoArrivo);
-            notify();
-            return ultimoArrivo;
-        }
-        return null;
+    public synchronized int size() {
+        return lista.size();
     }
 }

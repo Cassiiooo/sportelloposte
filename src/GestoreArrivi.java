@@ -1,48 +1,41 @@
-/**
- * Classe che implementa il thread per il totem touch screen che aggiunge
- * i clienti alla lista di attesa e genera il numero di attesa
- * rappresenta il produttore
- * @author frida
- * @version 1.0
- */
-public class GestoreArrivi implements Runnable {
+public class GestoreArrivi extends Thread {
 
-    /* variabili d'istanza sono;
-     * la risorsa condivisa listaClienti
-     * e la costante per il numero massimo di arrivi */
-    private ListaClienti listaClienti;
-    /* ms fra un arrivo e l'altro */
-    private final int attesaArrivi = 3000;
-    /**
-     * constructor
-     * @param listaClienti
-     */
-    public GestoreArrivi(ListaClienti listaClienti) {
-        this.listaClienti = listaClienti;
+    private ListaClienti lista;
+    private int clienteID = 1;
+    private boolean aperto = true;
+    private int clientiRifiutati = 0;
+
+    public GestoreArrivi(ListaClienti lista) {
+        this.lista = lista;
     }
- /**
- * Gestisce gli arrivi dei clienti finché il thread non viene interrotto.
- * Ogni attesaArrivi aggiunge un cliente; se addCliente() restituisce null,
- * il ciclo termina. Gestisce l’interruzione durante lo sleep e alla fine
- * segnala la chiusura della posta.
- *
- * @see Runnable
- */
 
+    public void chiudi() {
+        aperto = false;
+    }
+
+    public int getClientiRifiutati() {
+        return clientiRifiutati;
+    }
+
+    @Override
     public void run() {
-        try {
-            while (!Thread.interrupted()) { 
-                Thread.sleep(attesaArrivi);
-                Integer clienteArrivato = listaClienti.addCliente();
-                if (clienteArrivato == null) {
-                    break;
+        while (aperto) {
+            try {
+                Thread.sleep(1000);
+
+                boolean inserito = lista.aggiungiCliente(clienteID);
+                if (inserito) {
+                    System.out.println("Cliente " + clienteID + " entrato in poste");
+                    clienteID++;
+                } else {
+                    clientiRifiutati++;
+                    System.out.println("Cliente rifiutato: coda piena");
                 }
-                System.out.println("Arrivo Cliente Numero \t " + clienteArrivato);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch (InterruptedException e) {
-            System.out.println("Thread interrotto durante lo sleep");
-        } finally {
-            System.out.println("Posta Chiusa");
         }
+        System.out.println("Posta Chiusa");
     }
 }
